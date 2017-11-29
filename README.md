@@ -14,3 +14,8 @@ You can clone this repo to your local server to host your libs without replacing
 - libs.baidu.com
 - yandex.st
 - yastatic.net
+
+## ToDo List :
+
+- Auto install script
+- A Wiki
