@@ -8,6 +8,7 @@ You can clone this repo to your local server to host your libs without replacing
 - ajax.googleapis.com
 - ajax.microsoft.com
 - cdn.jsdelivr.net
+
 - cdnjs.cloudflare.com
 - code.jquery.com
 - lib.sinaapp.com
@@ -17,5 +18,5 @@ You can clone this repo to your local server to host your libs without replacing
 
 ## ToDo List :
 
-- Auto install script
+- Auto install script (in progress)
 - A Wiki
