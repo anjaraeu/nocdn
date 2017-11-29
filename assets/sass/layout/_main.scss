@@ -1,5 +1,5 @@
 ///
-/// Dimension by HTML5 UP
+/// Stellar by HTML5 UP
 /// html5up.net | @ajlkn
 /// Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 ///
@@ -7,96 +7,93 @@
 /* Main */
 
 	#main {
-		@include vendor('flex-grow', '1');
-		@include vendor('flex-shrink', '1');
-		@include vendor('display', 'flex');
-		@include vendor('align-items', 'center');
-		@include vendor('justify-content', 'center');
-		@include vendor('flex-direction', 'column');
-		position: relative;
-		max-width: 100%;
-		z-index: 3;
+		@include color(invert);
+		border-radius: _size(border-radius-main);
 
-		article {
-			@include vendor('transform', 'translateY(0.25rem)');
-			@include vendor('transition', (
-				'opacity #{_duration(article)} ease-in-out',
-				'transform #{_duration(article)} ease-in-out'
-			));
-			@include padding(2.5rem, 2.5rem, (2rem, 0, 1rem, 0));
-			position: relative;
-			width: 40rem;
-			max-width: 100%;
-			background-color: transparentize(_palette(bg), 0.15);
-			border-radius: _size(border-radius);
-			opacity: 0;
+		> .main {
+			@include padding(5em, 5em);
+			border-top: solid 1px _palette(invert, border);
 
-			&.active {
-				@include vendor('transform', 'translateY(0)');
-				opacity: 1;
+			&:first-child {
+				border-top: 0;
 			}
 
-			.close {
-				display: block;
-				position: absolute;
-				top: 0;
-				right: 0;
-				width: 4rem;
-				height: 4rem;
-				cursor: pointer;
-				text-indent: 4rem;
-				overflow: hidden;
-				white-space: nowrap;
+			> .image.main:first-child {
+				margin: -5em 0 5em -5em;
+				width: calc(100% + 10em);
+				border-top-right-radius: _size(border-radius-main);
+				border-top-left-radius: _size(border-radius-main);
+				border-bottom-right-radius: 0;
+				border-bottom-left-radius: 0;
 
-				&:before {
-					@include vendor('transition', 'background-color #{_duration(transition)} ease-in-out');
-					content: '';
-					display: block;
-					position: absolute;
-					top: 0.75rem;
-					left: 0.75rem;
-					width: 2.5rem;
-					height: 2.5rem;
-					border-radius: 100%;
-					background-position: center;
-					background-image: svg-url('<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="20px" height="20px" viewBox="0 0 20 20" zoomAndPan="disable"><style>line { stroke: #{_palette(border)}; stroke-width: 1; }</style><line x1="2" y1="2" x2="18" y2="18" /><line x1="18" y1="2" x2="2" y2="18" /></svg>');
-					background-size: 20px 20px;
-					background-repeat: no-repeat;
+				img {
+					border-top-right-radius: _size(border-radius-main);
+					border-top-left-radius: _size(border-radius-main);
+					border-bottom-right-radius: 0;
+					border-bottom-left-radius: 0;
 				}
+			}
+		}
 
-				&:hover {
-					&:before {
-						background-color: _palette(border-bg);
-					}
+		@include breakpoint(large) {
+			> .main {
+				@include padding(4em, 4em);
+
+				> .image.main:first-child {
+					margin: -4em 0 4em -4em;
+					width: calc(100% + 8em);
 				}
+			}
+		}
 
-				&:active {
-					&:before {
-						background-color: _palette(border-bg-alt);
-					}
+		@include breakpoint(medium) {
+			> .main {
+				@include padding(4em, 3em);
+
+				> .image.main:first-child {
+					margin: -4em 0 4em -3em;
+					width: calc(100% + 6em);
 				}
 			}
 		}
 
 		@include breakpoint(small) {
-			article {
-				@include padding(2rem, 2rem, (1.5rem, 0, 0.5rem, 0));
+			> .main {
+				@include padding(3em, 2em);
 
-				.close {
-					&:before {
-						top: 0.875rem;
-						left: 0.875rem;
-						width: 2.25rem;
-						height: 2.25rem;
-						background-size: 14px 14px;
-					}
+				> .image.main:first-child {
+					margin: -3em 0 2em -2em;
+					width: calc(100% + 4em);
 				}
 			}
 		}
 
 		@include breakpoint(xsmall) {
-			article {
-				@include padding(2rem, 1.5rem, (1rem, 0, 0.5rem, 0));
+			> .main {
+				@include padding(3em, 1.5em);
+
+				> .image.main:first-child {
+					margin: -3em 0 1.5em -1.5em;
+					width: calc(100% + 3em);
+				}
+			}
+		}
+
+		@include breakpoint(xxsmall) {
+			border-radius: 0;
+
+			> .main {
+				@include padding(2.5em, 1em);
+
+				> .image.main:first-child {
+					margin: -2.5em 0 1.5em -1em;
+					width: calc(100% + 2em);
+					border-radius: 0;
+
+					img {
+						border-radius: 0;
+					}
+				}
 			}
 		}
 	}

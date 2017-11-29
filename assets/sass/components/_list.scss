@@ -1,5 +1,5 @@
 ///
-/// Dimension by HTML5 UP
+/// Stellar by HTML5 UP
 /// html5up.net | @ajlkn
 /// Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 ///
@@ -30,7 +30,7 @@
 			padding-left: 0;
 
 			li {
-				border-top: solid _size(border-width) _palette(border);
+				border-top: solid 1px;
 				padding: 0.5em 0;
 
 				&:first-child {
@@ -47,28 +47,10 @@
 
 			li {
 				display: inline-block;
-				padding: 0 0.75em 0 0;
+				padding: 0 0.65em 0 0;
 
 				&:last-child {
-					padding-right: 0;
-				}
-
-				a {
-					border-radius: 100%;
-					box-shadow: inset 0 0 0 _size(border-width) _palette(border);
-					display: inline-block;
-					height: 2.25rem;
-					line-height: 2.25rem;
-					text-align: center;
-					width: 2.25rem;
-
-					&:hover {
-						background-color: _palette(border-bg);
-					}
-
-					&:active {
-						background-color: _palette(border-bg-alt);
-					}
+					padding-right: 0 !important;
 				}
 			}
 		}
@@ -161,12 +143,6 @@
 					> * {
 						width: 100%;
 						margin: 0 !important;
-
-						&.icon {
-							&:before {
-								margin-left: -2em;
-							}
-						}
 					}
 				}
 
@@ -195,4 +171,42 @@
 		dd {
 			margin-left: _size(element-margin);
 		}
+
+		&.alt {
+			dt {
+				display: block;
+				width: 3em;
+				margin: 0;
+				clear: left;
+				float: left;
+			}
+
+			dd {
+				margin: 0 0 0.85em 5.5em;
+			}
+
+			&:after {
+				content: '';
+				display: block;
+				clear: both;
+			}
+		}
 	}
+
+	@mixin color-list($p: null) {
+		ul {
+			&.alt {
+				li {
+					border-top-color: _palette($p, border);
+				}
+			}
+		}
+
+		dl {
+			dt {
+				color: _palette($p, fg-bold);
+			}
+		}
+	}
+
+	@include color-list;

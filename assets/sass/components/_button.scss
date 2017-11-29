@@ -1,5 +1,5 @@
 ///
-/// Dimension by HTML5 UP
+/// Stellar by HTML5 UP
 /// html5up.net | @ajlkn
 /// Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 ///
@@ -12,35 +12,26 @@
 	button,
 	.button {
 		@include vendor('appearance', 'none');
-		@include vendor('transition', 'background-color #{_duration(transition)} ease-in-out, color #{_duration(transition)} ease-in-out');
-		background-color: transparent;
+		@include vendor('transition', (
+			'background-color #{_duration(transition)} ease-in-out',
+			'color #{_duration(transition)} ease-in-out'
+		));
 		border-radius: _size(border-radius);
 		border: 0;
-		box-shadow: inset 0 0 0 _size(border-width) _palette(border);
-		color: _palette(fg-bold) !important;
 		cursor: pointer;
 		display: inline-block;
-		font-size: 0.8rem;
 		font-weight: _font(weight);
-		height: _size(element-height);
-		letter-spacing: _font(letter-spacing);
-		line-height: _size(element-height);
-		outline: 0;
-		padding: 0 1.25rem 0 (1.25rem + (_font(letter-spacing) * 0.5));
+		height: 2.75em;
+		line-height: 2.75em;
+		min-width: 9.25em;
+		padding: 0 1.5em;
 		text-align: center;
 		text-decoration: none;
-		text-transform: uppercase;
 		white-space: nowrap;
 
-		&:hover {
-			background-color: _palette(border-bg);
-		}
-
-		&:active {
-			background-color: _palette(border-bg-alt);
-		}
-
 		&.icon {
+			padding-left: 1.35em;
+
 			&:before {
 				margin-right: 0.5em;
 			}
@@ -52,29 +43,69 @@
 			width: 100%;
 		}
 
-		&.special {
-			background-color: _palette(fg-bold);
-			color: _palette(bg) !important;
-			font-weight: _font(weight-bold);
+		&.small {
+			font-size: 0.8em;
+		}
 
-			&:hover {
-			}
-
-			&:active {
-			}
+		&.big {
+			font-size: 1.35em;
 		}
 
 		&.disabled,
 		&:disabled {
 			@include vendor('pointer-events', 'none');
-			cursor: default;
 			opacity: 0.25;
+		}
+
+		@include breakpoint(small) {
+			min-width: 0;
 		}
 	}
 
-	input[type="submit"],
-	input[type="reset"],
-	input[type="button"],
-	button {
-		line-height: calc(#{_size(element-height)} - 2px);
+	@mixin color-button($p: null) {
+		input[type="submit"],
+		input[type="reset"],
+		input[type="button"],
+		button,
+		.button {
+			background-color: transparent;
+			box-shadow: inset 0 0 0 1px _palette($p, border);
+			color: _palette($p, fg-bold) !important;
+
+			&:hover {
+				background-color: _palette($p, border-bg);
+			}
+
+			&:active {
+				background-color: _palette($p, border2-bg);
+			}
+
+			&.icon {
+				&:before {
+					color: _palette($p, fg-light);
+				}
+			}
+
+			&.special {
+				background-color: _palette(accent);
+				color: _palette(invert, bg) !important;
+				box-shadow: none;
+
+				&:hover {
+					background-color: lighten(_palette(accent), 3);
+				}
+
+				&:active {
+					background-color: darken(_palette(accent), 3);
+				}
+
+				&.icon {
+					&:before {
+						color: _palette(invert, bg) !important;
+					}
+				}
+			}
+		}
 	}
+
+	@include color-button;

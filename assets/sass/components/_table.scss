@@ -1,5 +1,5 @@
 ///
-/// Dimension by HTML5 UP
+/// Stellar by HTML5 UP
 /// html5up.net | @ajlkn
 /// Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 ///
@@ -17,13 +17,9 @@
 
 		tbody {
 			tr {
-				border: solid _size(border-width) _palette(border);
+				border: solid 1px;
 				border-left: 0;
 				border-right: 0;
-
-				&:nth-child(2n + 1) {
-					background-color: _palette(border-bg);
-				}
 			}
 		}
 
@@ -32,7 +28,6 @@
 		}
 
 		th {
-			color: _palette(fg-bold);
 			font-size: 0.9em;
 			font-weight: _font(weight-bold);
 			padding: 0 0.75em 0.75em 0.75em;
@@ -40,11 +35,11 @@
 		}
 
 		thead {
-			border-bottom: solid (_size(border-width) * 2) _palette(border);
+			border-bottom: solid 2px;
 		}
 
 		tfoot {
-			border-top: solid (_size(border-width) * 2) _palette(border);
+			border-top: solid 2px;
 		}
 
 		&.alt {
@@ -53,18 +48,18 @@
 			tbody {
 				tr {
 					td {
-						border: solid _size(border-width) _palette(border);
+						border: solid 1px;
 						border-left-width: 0;
 						border-top-width: 0;
 
 						&:first-child {
-							border-left-width: _size(border-width);
+							border-left-width: 1px;
 						}
 					}
 
 					&:first-child {
 						td {
-							border-top-width: _size(border-width);
+							border-top-width: 1px;
 						}
 					}
 				}
@@ -79,3 +74,41 @@
 			}
 		}
 	}
+
+	@mixin color-table($p: null) {
+		table {
+			tbody {
+				tr {
+					border-color: _palette($p, border);
+
+					&:nth-child(2n + 1) {
+						background-color: _palette($p, border-bg);
+					}
+				}
+			}
+
+			th {
+				color: _palette($p, fg-bold);
+			}
+
+			thead {
+				border-bottom-color: _palette($p, border);
+			}
+
+			tfoot {
+				border-top-color: _palette($p, border);
+			}
+
+			&.alt {
+				tbody {
+					tr {
+						td {
+							border-color: _palette($p, border);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@include color-table;
