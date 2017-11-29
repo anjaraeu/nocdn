@@ -1,4 +1,4 @@
-# fuckcdn
+# FuckCDN
 Fuckcdn is an alternative to CDNs
 You can clone this repo to your local server to host your libs without replacing all paths (just add fuckcdn.my.site/ to every CDN load)
 
