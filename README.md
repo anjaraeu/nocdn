@@ -9,7 +9,9 @@ You can do it by editing the entries in your local resolver or editing your host
 
 So each time you call for a cdn, the request will be handled by your instance, a big plus for privacy.
 
-## CDNs
+For now, we only support Javascript CDN, we will do css CDN in the future.
+
+## CDNs supported
 
 - ajax.aspnetcdn.com
 - ajax.googleapis.com
@@ -22,6 +24,10 @@ So each time you call for a cdn, the request will be handled by your instance, a
 - libs.baidu.com
 - yandex.st
 - yastatic.net
+
+## License :
+
+This project is under the MIT license, if you have any question, please contact a member of the team.
 
 ## ToDo List :
 
