@@ -1,5 +1,5 @@
 ///
-/// Dimension by HTML5 UP
+/// Stellar by HTML5 UP
 /// html5up.net | @ajlkn
 /// Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 ///
@@ -7,30 +7,15 @@
 /* Wrapper */
 
 	#wrapper {
-		@include vendor('display', 'flex');
-		@include vendor('flex-direction', 'column');
-		@include vendor('align-items', 'center');
-		@include vendor('justify-content', 'space-between');
-		position: relative;
-		min-height: 100vh;
-		width: 100%;
-		padding: 4rem 2rem;
-		z-index: 3;
-
-		&:before {
-			content: '';
-			display: block;
-		}
-
-		@include breakpoint(xlarge) {
-			padding: 3rem 2rem;
-		}
-
-		@include breakpoint(small) {
-			padding: 2rem 1rem;
-		}
+		width: _size(inner);
+		max-width: calc(100% - 4em);
+		margin: 0 auto;
 
 		@include breakpoint(xsmall) {
-			padding: 1rem;
+			max-width: calc(100% - 2em);
+		}
+
+		@include breakpoint(xxsmall) {
+			max-width: 100%;
 		}
 	}
