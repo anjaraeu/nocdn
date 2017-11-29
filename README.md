@@ -1,7 +1,7 @@
 # FuckCDN
 Fuckcdn is an alternative to old-school CDNs
 
-For the developpers who want to protect the privacy of the users, juste put "fuckcdn.domain.tld/" between "https://" and the CDN.
+For the developpers who wants to protect the privacy of the users, just put "fuckcdn.domain.tld/" between "https://" and the CDN.
 For ajax.googleapis.com and fuckcdn.nsa.ovh : https://fuckcdn.nsa.ovh/ajax.googleapis.com/some/random/ressource
 
 For a user, you can bind thoses old-school CDN to your instance.
