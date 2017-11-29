@@ -1,0 +1,2 @@
+# fuckcdn
+Alternative to CDNs
