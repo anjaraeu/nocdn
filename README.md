@@ -26,4 +26,4 @@ So each time you call for a cdn, the request will be handled by your instance, a
 ## ToDo List :
 
 - Auto install script (in progress)
-- A Wiki
+- A Wiki (one day)
