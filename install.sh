@@ -28,33 +28,26 @@ git clone https://github.com/Neilpang/acme.sh /root/.acme.sh
 
 #server {
 #	listen 443 ssl http2;
-#	server_name domain.tld;
+#	server_name domain;
 
 #	index index.html index.php;
 #	charset utf-8;
 #	client_max_body_size 10M;
 
-#	ssl_certificate /chemin/vers/la/fullchain.cer;
-#	ssl_certificate_key /chemin/vers/la/certificate.key;
+#	ssl_certificate /root/.acme.sh/domain/fullchain.cer;
+#	ssl_certificate_key /root/.acme.sh/domain/domain.key
 
 #	include /etc/nginx/conf.d/ciphers.conf;
 
-#	access_log /var/log/nginx/access.log combined;
-#	error_log /var/log/nginx/error.log error;
+#	access_log /var/log/nginx/nocdn-access.log combined;
+#	error_log /var/log/nginx/nocdn-error.log error;
 
-#	error_page 500 502 503 504 /50x.html;
-#	root /chemin/vers/le/directory;
+#	root /opt/nocdn;
 
 #	location = /favicon.ico {
 #		access_log off;
 #		log_not_found off;
 #	}
-
-#	location ~ \.php$ {
-#		include snippets/fastcgi-php.conf;
-#		fastcgi_pass unix:/run/php/php7.0-fpm.sock;
-#
-#}
 
 #	location ~* \.(jpg|jpeg|gif|css|png|js|map|woff|woff2|ttf|svg|eot)$ {
 #		expires 30d;
@@ -70,10 +63,14 @@ git clone https://github.com/Neilpang/acme.sh /root/.acme.sh
 /root/acme.sh/acme.sh --issue --webroot /opt/nocdn -k 4096 -d $domain
 }
 
-echo "On which sub)domain do you want to install NoCDN?"
-read domain
+echo "On which sub)domain do you want to install NoCDN?"; read domain
 
-read -r -p "Do you have already have nginx installed and include /etc/nginx/sites-enabled? [y/N] " response
+read -r -p "Do you have already have nginx installed and include /etc/nginx/sites-enabled/*? [y/N] " response
 response=${response,,}    # tolower
-if [[ "$response" =~ ^(yes|y)$ ]]
-
+if [[ "$response" =~ ^(yes|y)$ ]] ; then
+install_config
+fi
+if [[ "$response" =~ ^(no|n)$ ]] ; then
+	install_nginx
+	install_config
+fi
