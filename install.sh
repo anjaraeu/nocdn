@@ -19,7 +19,6 @@ function install_config {
 echo "Generating certificates..."
 git clone https://github.com/Neilpang/acme.sh /root/.acme.sh
 cp /srv/nocdn/conf/nginx_sample_nocdn_1.conf /etc/nginx/sites-enabled/nocdn1.conf
-cp /srv/nocdn/conf/nginx_sample_nocdn_2.conf /etc/nginx/sites-enabled/nocdn2.conf
 /root/acme.sh/acme.sh --issue --webroot /srv/nocdn/public -k 4096 -d $domain
 }
 
