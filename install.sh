@@ -25,7 +25,12 @@ git clone https://github.com/Neilpang/acme.sh /root/.acme.sh
 echo "Generating certificates..."
 /root/acme.sh/acme.sh --issue --webroot /srv/nocdn/public -k 4096 -d $domain
 openssl req -x509 -newkey rsa:4096 -sha256 -utf8 -days 3650 -nodes -config /srv/nocdn/conf/openssl.conf -keyout /srv/nocdn/certs/key.pem -out /srv/nocdn/certs/cert.pem
+echo "Restarting nginx ..."
+systemctl restart nginx
+}
 
+function success {
+echo "Congratulations, your nocdn instance is ready !"
 }
 
 echo "On which (sub)domain do you want to install NoCDN?"; read domain
@@ -38,4 +43,5 @@ fi
 if [[ "$response" =~ ^(no|n)$ ]] ; then
 	install_nginx
 	install_config
+	success
 fi
