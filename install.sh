@@ -39,6 +39,7 @@ read -r -p "Do you have already have nginx installed and include /etc/nginx/site
 response=${response,,}    # tolower
 if [[ "$response" =~ ^(yes|y)$ ]] ; then
 install_config
+success
 fi
 if [[ "$response" =~ ^(no|n)$ ]] ; then
 	install_nginx
