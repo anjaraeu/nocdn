@@ -31,6 +31,10 @@ fi
 
 }
 
+function install_nginx_arch {
+	pacman -S nginx
+}
+
 function install_config {
 echo "Installing NoCDN files ..."
 git clone https://github.com/nsaovh/nocdn /srv/nocdn
@@ -65,23 +69,23 @@ echo "It seems that you are running" $os $version
 
 if [ $os = "Debian" ]
 then
-if [ $version = "7.*" ]
+if [[ $version < 8.* ]]
 then
-	echo "Seriously ? Debian 7 ? Please consider to upgrade ..."
-	exit 1
-fi
-if [ $version = "6.*" ]
-then
-	echo "Seriously ? Debian 6 ? Please consider to upgrade ..."
+	echo "Seriously ? Debian" $version "? Please consider to upgrade ..."
 	exit 1
 fi
 	start_debian
 else
-	echo "Sorry, but at the moment, we only support Debian."
+if [ $os = "Arch" ]
+then
+	start_arch
+else
+	echo "Sorry, but at the moment, we only support Debian and Arch."
 	exit 1
 fi
 
 function start_debian {
+apt install git
 echo "On which (sub)domain do you want to install NoCDN?"; read domain
 
 read -r -p "Do you have already have nginx installed and include /etc/nginx/sites-enabled/* in your nginx.conf ? [y/N] " response
@@ -99,3 +103,21 @@ if [[ "$response" =~ ^(no|n)$ ]] ; then
 fi
 }
 
+function start_arch {
+pacman -S git
+echo "On which (sub)domain do you want to install NoCDN?"; read domain
+
+read -r -p "Do you have already have nginx installed and include /etc/nginx/sites-enabled/* in your nginx.conf ? [y/N] " response
+response=${response,,}    # tolower
+if [[ "$response" =~ ^(yes|y)$ ]] ; then
+install_config
+success
+exit 1
+fi
+if [[ "$response" =~ ^(no|n)$ ]] ; then
+	install_nginx_arch
+	install_config
+	success
+	exit 1
+fi
+}
