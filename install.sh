@@ -85,6 +85,7 @@ else
 fi
 
 function start_debian {
+apt update && apt full-upgrade -y
 apt install git
 echo "On which (sub)domain do you want to install NoCDN?"; read domain
 
@@ -104,6 +105,7 @@ fi
 }
 
 function start_arch {
+pacman -Syu
 pacman -S git
 echo "On which (sub)domain do you want to install NoCDN?"; read domain
 
