@@ -35,20 +35,11 @@ function install_nginx_arch {
 	pacman -S nginx --noconfirm
 }
 
-function install_config {
-	echo "Installing NoCDN files ..."
-	git clone https://github.com/nsaovh/nocdn /srv/nocdn
-	mkdir -p /srv/nocdn/certs
-	echo "Installing nginx config ..."
-	mkdir -p /etc/nginx/conf.d
-	cp /srv/nocdn/conf/ciphers.conf /etc/nginx/conf.d/ciphers.conf
+function le_certs {
+	# temp config for LE's first verification
 	cp /srv/nocdn/conf/nocdn1_temp.conf /etc/nginx/sites-enabled/nocdn1_temp.conf
-	cp /srv/nocdn/conf/nocdn2.conf /etc/nginx/sites-enabled/nocdn2.conf
 	sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1_temp.conf
-	echo "Generating self-signed certificate ..."
-	openssl req -x509 -newkey rsa:4096 -sha256 -utf8 -days 3650 -nodes -config /srv/nocdn/conf/openssl.conf -keyout /srv/nocdn/certs/key.pem -out /srv/nocdn/certs/cert.pem
-	systemctl restart nginx
-
+	
 	read -r -p "Is acme.sh already installed in /root/.acme.sh ? [y/N] " response
 	response=${response,,}    # tolower
 	if [[ "$response" =~ ^(yes|y)$ ]] ; then
@@ -73,6 +64,23 @@ function install_config {
 		echo "Restarting nginx ..."
 		systemctl restart nginx
 	fi
+}
+
+function install_config_1 {
+	echo "Installing NoCDN files ..."
+	mkdir /srv
+	git clone https://github.com/nsaovh/nocdn /srv/nocdn
+	echo "Installing nginx config ..."
+	mkdir -p /etc/nginx/conf.d
+	# TLS configuration
+	cp /srv/nocdn/conf/ciphers.conf /etc/nginx/conf.d/ciphers.conf
+
+	cp /srv/nocdn/conf/nocdn2.conf /etc/nginx/sites-enabled/nocdn2.conf
+	sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1_temp.conf
+	echo "Generating self-signed certificate ..."
+	openssl req -x509 -newkey rsa:4096 -sha256 -utf8 -days 3650 -nodes -config /srv/nocdn/conf/openssl.conf -keyout /srv/nocdn/certs/key.pem -out /srv/nocdn/certs/cert.pem
+	systemctl restart nginx
+
 }
 
 
