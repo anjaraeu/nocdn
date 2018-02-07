@@ -112,7 +112,7 @@ os=$(lsb_release -is)
 version=$(lsb_release -rs)
 echo "It seems that you are running" $os $version
 
-if [ $os = "Debian" ]
+if [ $os = "Debian" ];
 then
 if [[ $version < 8.* ]]
 then
