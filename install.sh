@@ -43,6 +43,7 @@ function install_config {
 	cp /srv/nocdn/conf/nocdn1.conf /etc/nginx/sites-enabled/nocdn1.conf
 	cp /srv/nocdn/conf/nocdn2.conf /etc/nginx/sites-enabled/nocdn2.conf
 	sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1.conf
+	sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1.conf
 
 	read -r -p "Is acme.sh already installed in /root/.acme.sh ? [y/N] " response
 	response=${response,,}    # tolower
