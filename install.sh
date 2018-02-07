@@ -112,19 +112,20 @@ os=$(lsb_release -is)
 version=$(lsb_release -rs)
 echo "It seems that you are running" $os $version
 
-if [[ $os = "Debian" ]];
+if [[ "$os" == "Debian" ]];
 then
-if [[ $version < 8.* ]];
+if [ "$version" -lt 8.* ];
 then
 	echo "Seriously ? Debian" $version "? Please consider to upgrade ..."
 	exit 1
 fi
 	start_debian
 else
-if [[ $os = "Arch" ]]; 
+if [[ "$os" == "Arch" ]]; 
 then
 	start_arch
 else
 	echo "Sorry, but at the moment, we only support Debian and Arch."
 	exit 1
+fi
 fi
