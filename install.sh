@@ -8,11 +8,11 @@ echo ' |_| \_|\___/ \_____|_____/|_| \_|'
 echo 'This script will install a NoCDN instance on /srv/nocdn.'
 
 function install_nginx_debian {
-if [ $version = "9.*" ]
+if [ "$version" = "9.*" ]
 then
 	apt install nginx
 fi
-if [ $version = "8.*" ]
+if [ "$version" = "8.*" ]
 then
 	echo "The nginx package from Debian Jessie Depots is too old (1.6.2)"
 	echo ""
@@ -41,7 +41,7 @@ function install_config {
 	echo "Installing nginx config ..."
 	cp /srv/nocdn/conf/nocdn1.conf /etc/nginx/sites-enabled/nocdn1.conf
 	cp /srv/nocdn/conf/nocdn2.conf /etc/nginx/sites-enabled/nocdn2.conf
-	sed -i 's|domain.tld|$domain|' /etc/nginx/sites-enabled/nocdn1.conf
+	sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1.conf
 
 	read -r -p "Is acme.sh already installed in /root/.acme.sh ? [y/N] " response
 	response=${response,,}    # tolower
@@ -67,7 +67,7 @@ function install_config {
 function start_debian {
 apt update && apt full-upgrade -y
 apt install git
-echo "On which (sub)domain do you want to install NoCDN?"; read domain
+echo "On which (sub)domain do you want to install NoCDN?"; read -r domain
 
 read -r -p "Do you have already have nginx installed and include /etc/nginx/sites-enabled/* in your nginx.conf ? [y/N] " response
 response=${response,,}    # tolower
@@ -87,7 +87,7 @@ fi
 function start_arch {
 	pacman -Syu
 	pacman -S git
-	echo "On which (sub)domain do you want to install NoCDN?"; read domain
+	echo "On which (sub)domain do you want to install NoCDN?"; read -r domain
 
 	read -r -p "Do you have already have nginx installed and include /etc/nginx/sites-enabled/* in your nginx.conf ? [y/N] " response
 	response=${response,,}    # tolower
