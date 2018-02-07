@@ -31,6 +31,20 @@ fi
 
 }
 
+function choice-le-selfsigned {
+	# leorsf means Let's encrypt or self-signed
+	echo "Do you want to generate and use self-signed certificates or use a Let's Encrypt one? [LE/selfsigned]"; read -p leorsf
+
+if [[ "$leorsf" == "LE" ]]; then
+	le_certs
+else
+	if [[ "$leorsf" == "selfsigned" ]]; then
+		selfsigned_certs
+	fi
+fi
+
+}
+
 function install_nginx_arch {
 	pacman -S nginx --noconfirm
 }
@@ -66,6 +80,12 @@ function le_certs {
 	fi
 }
 
+
+function le_certs {
+	echo "Generating self-signed certificate ..."
+	openssl req -x509 -newkey rsa:4096 -sha256 -utf8 -days 3650 -nodes -config /srv/nocdn/conf/openssl.conf -keyout /srv/nocdn/certs/key.pem -out /srv/nocdn/certs/cert.pem
+}
+
 function install_config_1 {
 	echo "Installing NoCDN files ..."
 	mkdir /srv
@@ -77,8 +97,6 @@ function install_config_1 {
 
 	cp /srv/nocdn/conf/nocdn2.conf /etc/nginx/sites-enabled/nocdn2.conf
 	sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1_temp.conf
-	echo "Generating self-signed certificate ..."
-	openssl req -x509 -newkey rsa:4096 -sha256 -utf8 -days 3650 -nodes -config /srv/nocdn/conf/openssl.conf -keyout /srv/nocdn/certs/key.pem -out /srv/nocdn/certs/cert.pem
 	systemctl restart nginx
 
 }
