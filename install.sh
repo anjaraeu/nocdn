@@ -45,30 +45,31 @@ function install_config {
 	cp /srv/nocdn/conf/nocdn1_temp.conf /etc/nginx/sites-enabled/nocdn1_temp.conf
 	cp /srv/nocdn/conf/nocdn2.conf /etc/nginx/sites-enabled/nocdn2.conf
 	sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1_temp.conf
+	echo "Generating self-signed certificate ..."
+	openssl req -x509 -newkey rsa:4096 -sha256 -utf8 -days 3650 -nodes -config /srv/nocdn/conf/openssl.conf -keyout /srv/nocdn/certs/key.pem -out /srv/nocdn/certs/cert.pem
+	systemctl nginx restart
 
 	read -r -p "Is acme.sh already installed in /root/.acme.sh ? [y/N] " response
 	response=${response,,}    # tolower
 	if [[ "$response" =~ ^(yes|y)$ ]] ; then
-		echo "Generating certificates..."
+		echo "Generating Let's Encrypt certificate ..."
 		/root/.acme.sh/acme.sh --issue --nginx -k 4096 -d $domain
 		rm /etc/nginx/sites-enabled/nocdn1_temp.conf
 		cp /srv/nocdn/conf/nocdn1.conf /etc/nginx/sites-enabled/nocdn1.conf
 		sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1.conf
 		sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1.conf
-		openssl req -x509 -newkey rsa:4096 -sha256 -utf8 -days 3650 -nodes -config /srv/nocdn/conf/openssl.conf -keyout /srv/nocdn/certs/key.pem -out /srv/nocdn/certs/cert.pem
 		echo "Restarting nginx ..."
 		systemctl restart nginx
 	fi
 	if [[ "$response" =~ ^(no|n)$ ]] ; then
 		echo "Installing acme.sh ..."
 		git clone https://github.com/Neilpang/acme.sh /root/.acme.sh
-		echo "Generating certificates..."
+		echo "Generating Let's Encrypt certificate ..."
 		/root/acme.sh/acme.sh --issue --nginx -k 4096 -d $domain
 		rm /etc/nginx/sites-enabled/nocdn1_temp.conf
 		cp /srv/nocdn/conf/nocdn1.conf /etc/nginx/sites-enabled/nocdn1.conf
 		sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1.conf
 		sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1.conf
-		openssl req -x509 -newkey rsa:4096 -sha256 -utf8 -days 3650 -nodes -config /srv/nocdn/conf/openssl.conf -keyout /srv/nocdn/certs/key.pem -out /srv/nocdn/certs/cert.pem
 		echo "Restarting nginx ..."
 		systemctl restart nginx
 	fi
