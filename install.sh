@@ -121,7 +121,7 @@ then
 fi
 	start_debian
 else
-if [ $os = "Arch" ]
+if [ $os = "Arch" ]; 
 then
 	start_arch
 else
