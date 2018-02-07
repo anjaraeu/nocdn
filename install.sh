@@ -10,7 +10,7 @@ echo 'This script will install a NoCDN instance on /srv/nocdn.'
 function install_nginx_debian {
 if [ "$version" = "9.*" ]
 then
-	apt install nginx
+	apt install nginx -y
 fi
 if [ "$version" = "8.*" ]
 then
@@ -19,12 +19,12 @@ then
 	read -r -p "Are the jessie backports already installed ? [y/N] " response
 	response=${response,,}    # tolower
 	if [[ "$response" =~ ^(yes|y)$ ]] ; then
-		apt-get -t jessie-backports install nginx
+		apt-get -t jessie-backports install nginx -y
 	fi
 	if [[ "$response" =~ ^(no|n)$ ]] ; then
 		echo "deb http://ftp.debian.org/debian jessie-backports main" > /etc/apt/sources.list.d/backports.list
 		apt-get update
-		apt-get -t jessie-backports install nginx
+		apt-get -t jessie-backports install nginx -y
 	fi
 fi
 
@@ -32,7 +32,7 @@ fi
 }
 
 function install_nginx_arch {
-	pacman -S nginx
+	pacman -S nginx --noconfirm
 }
 
 function install_config {
@@ -47,7 +47,7 @@ function install_config {
 	sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1_temp.conf
 	echo "Generating self-signed certificate ..."
 	openssl req -x509 -newkey rsa:4096 -sha256 -utf8 -days 3650 -nodes -config /srv/nocdn/conf/openssl.conf -keyout /srv/nocdn/certs/key.pem -out /srv/nocdn/certs/cert.pem
-	systemctl nginx restart
+	systemctl restart nginx
 
 	read -r -p "Is acme.sh already installed in /root/.acme.sh ? [y/N] " response
 	response=${response,,}    # tolower
@@ -98,7 +98,7 @@ fi
 
 function start_arch {
 	pacman -Syu
-	pacman -S git
+	pacman -S git --noconfirm
 	echo "On which (sub)domain do you want to install NoCDN?"; read -r domain
 
 	read -r -p "Do you have already have nginx installed and include /etc/nginx/sites-enabled/* in your nginx.conf ? [y/N] " response
