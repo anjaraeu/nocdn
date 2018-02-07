@@ -63,6 +63,47 @@ function install_config {
 	fi
 }
 
+
+function start_debian {
+apt update && apt full-upgrade -y
+apt install git
+echo "On which (sub)domain do you want to install NoCDN?"; read domain
+
+read -r -p "Do you have already have nginx installed and include /etc/nginx/sites-enabled/* in your nginx.conf ? [y/N] " response
+response=${response,,}    # tolower
+if [[ "$response" =~ ^(yes|y)$ ]] ; then
+install_config
+success
+exit 1
+fi
+if [[ "$response" =~ ^(no|n)$ ]] ; then
+	install_nginx_debian
+	install_config
+	success
+	exit 1
+fi
+}
+
+function start_arch {
+	pacman -Syu
+	pacman -S git
+	echo "On which (sub)domain do you want to install NoCDN?"; read domain
+
+	read -r -p "Do you have already have nginx installed and include /etc/nginx/sites-enabled/* in your nginx.conf ? [y/N] " response
+	response=${response,,}    # tolower
+	if [[ "$response" =~ ^(yes|y)$ ]] ; then
+		install_config
+		success
+	exit 1
+	fi
+	if [[ "$response" =~ ^(no|n)$ ]] ; then
+		install_nginx_arch
+		install_config
+		success
+		exit 1
+	fi
+}
+
 function success {
 echo "Congratulations, your nocdn instance is ready !"
 }
@@ -87,43 +128,3 @@ else
 	echo "Sorry, but at the moment, we only support Debian and Arch."
 	exit 1
 fi
-
-function start_debian {
-apt update && apt full-upgrade -y
-apt install git
-echo "On which (sub)domain do you want to install NoCDN?"; read domain
-
-read -r -p "Do you have already have nginx installed and include /etc/nginx/sites-enabled/* in your nginx.conf ? [y/N] " response
-response=${response,,}    # tolower
-if [[ "$response" =~ ^(yes|y)$ ]] ; then
-install_config
-success
-exit 1
-fi
-if [[ "$response" =~ ^(no|n)$ ]] ; then
-	install_nginx_debian
-	install_config
-	success
-	exit 1
-fi
-}
-
-function start_arch {
-pacman -Syu
-pacman -S git
-echo "On which (sub)domain do you want to install NoCDN?"; read domain
-
-read -r -p "Do you have already have nginx installed and include /etc/nginx/sites-enabled/* in your nginx.conf ? [y/N] " response
-response=${response,,}    # tolower
-if [[ "$response" =~ ^(yes|y)$ ]] ; then
-install_config
-success
-exit 1
-fi
-if [[ "$response" =~ ^(no|n)$ ]] ; then
-	install_nginx_arch
-	install_config
-	success
-	exit 1
-fi
-}
