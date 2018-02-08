@@ -34,9 +34,9 @@ fi
 function choice-le-selfsigned {
 	# leorsf means Let's encrypt or self-signed
 	echo "For the 'Fantom cdn' part, a self-signed certificate will be used, (we can't issue a cert from a trusted CA for the CDNs), but you  can use a Let's encrypt certificate for the public part."
-	echo "Do you want to generate and use self-signed certificates or use a Let's Encrypt one ? [LE/selfsigned]"; read -p leorsf
+	read -r -p "Do you want to generate and use self-signed certificates or use a Let's Encrypt one ? [LE/selfsigned]" leorsf
 
-if [[ "$leorsf" == "LE" ]]; then
+if [[ "$leorsf" =~ ^(LE|le)$ ]] ; then
 	le_certs
 else
 	if [[ "$leorsf" == "selfsigned" ]]; then
@@ -110,9 +110,6 @@ function install_config_1 {
 
 	# Nginx config for the fantoms CDNs
 	cp /srv/nocdn/conf/nocdn2.conf /etc/nginx/sites-enabled/nocdn2.conf
-	
-	# Restart nginx
-	systemctl restart nginx
 
 	# generate certs
 	choice-le-selfsigned
