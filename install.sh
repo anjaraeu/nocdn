@@ -107,6 +107,10 @@ function install_config_1 {
 	mkdir -p /etc/nginx/conf.d
 	# TLS configuration
 	cp /srv/nocdn/conf/ciphers.conf /etc/nginx/conf.d/ciphers.conf
+	
+	# Create certs dir for selfsigned certs.
+	
+	mkdir -p /srv/nocdn/certs
 
 	# Nginx config for the fantoms CDNs
 	cp /srv/nocdn/conf/nocdn2.conf /etc/nginx/sites-enabled/nocdn2.conf
