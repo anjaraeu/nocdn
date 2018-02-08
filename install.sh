@@ -47,7 +47,7 @@ fi
 
 function choice-le-selfsigned {
 	# leorsf means Let's encrypt or self-signed
-	echo -e "${GREEN}For the 'Fantom cdn' part, a self-signed certificate will be used, (we can't issue a cert from a trusted CA for the CDNs), but you  can use a Let's encrypt certificate for the public part."
+	echo -e "${GREEN}For the 'ghost cdn' part, a self-signed certificate will be used, (we can't issue a cert from a trusted CA for the CDNs), but you  can use a Let's encrypt certificate for the public part."
 	echo -e "Do you want to generate and use self-signed certificates or use a Let's Encrypt one ? [LE/selfsigned]${NC}"; read -r leorsf
 
 if [[ "$leorsf" =~ ^(LE|le)$ ]] ; then
@@ -78,8 +78,8 @@ function le_certs {
 		cp /srv/nocdn/conf/nocdn1.conf /etc/nginx/sites-enabled/nocdn1.conf
 		sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1.conf
 		sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1.conf
-		echo -e "${GREEN}Generating the fantom self-signed certificate ...${NC}"
-		openssl req -x509 -newkey rsa:4096 -sha256 -utf8 -days 3650 -nodes -config /srv/nocdn/conf/openssl_fantom.conf -keyout /srv/nocdn/certs/fantom_key.pem -out /srv/nocdn/certs/fantom_cert.pem
+		echo -e "${GREEN}Generating the ghost self-signed certificate ...${NC}"
+		openssl req -x509 -newkey rsa:4096 -sha256 -utf8 -days 3650 -nodes -config /srv/nocdn/conf/openssl_ghost.conf -keyout /srv/nocdn/certs/ghost_key.pem -out /srv/nocdn/certs/ghost_cert.pem
 		echo -e "${GREEN}Restarting nginx ... ${NC}"
 		systemctl restart nginx
 		install_config_2_le
@@ -93,8 +93,8 @@ function le_certs {
 		cp /srv/nocdn/conf/nocdn1.conf /etc/nginx/sites-enabled/nocdn1.conf
 		sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1.conf
 		sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1.conf
-		echo -e "${GREEN}Generating the fantom self-signed certificate ...${NC}"
-		openssl req -x509 -newkey rsa:4096 -sha256 -utf8 -days 3650 -nodes -config /srv/nocdn/conf/openssl_fantom.conf -keyout /srv/nocdn/certs/fantom_key.pem -out /srv/nocdn/certs/fantom_cert.pem
+		echo -e "${GREEN}Generating the ghost self-signed certificate ...${NC}"
+		openssl req -x509 -newkey rsa:4096 -sha256 -utf8 -days 3650 -nodes -config /srv/nocdn/conf/openssl_ghost.conf -keyout /srv/nocdn/certs/ghost_key.pem -out /srv/nocdn/certs/ghost_cert.pem
 		echo -e "${GREEN}Restarting nginx ...${NC}"
 		systemctl restart nginx
 		install_config_2_le
@@ -106,8 +106,8 @@ function selfsigned_certs {
 	echo -e "${GREEN}Generating the public self-signed certificate ...${NC}"
 	sed -i "s|domain.tld|$domain|" /srv/nocdn/conf/openssl_public.conf
 	openssl req -x509 -newkey rsa:4096 -sha256 -utf8 -days 3650 -nodes -config /srv/nocdn/conf/openssl_public.conf -keyout /srv/nocdn/certs/public_key.pem -out /srv/nocdn/certs/public_cert.pem
-	echo -e "${GREEN}Generating the fantom self-signed certificate ...${NC}"
-	openssl req -x509 -newkey rsa:4096 -sha256 -utf8 -days 3650 -nodes -config /srv/nocdn/conf/openssl_fantom.conf -keyout /srv/nocdn/certs/fantom_key.pem -out /srv/nocdn/certs/fantom_cert.pem
+	echo -e "${GREEN}Generating the ghost self-signed certificate ...${NC}"
+	openssl req -x509 -newkey rsa:4096 -sha256 -utf8 -days 3650 -nodes -config /srv/nocdn/conf/openssl_ghost.conf -keyout /srv/nocdn/certs/ghost_key.pem -out /srv/nocdn/certs/ghost_cert.pem
 	install_config_2_selfsigned
 }
 
@@ -126,7 +126,7 @@ function install_config_1 {
 
 	mkdir -p /srv/nocdn/certs
 
-	# Nginx config for the fantoms CDNs
+	# Nginx config for the ghosts CDNs
 	cp /srv/nocdn/conf/nocdn2.conf /etc/nginx/sites-enabled/nocdn2.conf
 
 	# generate certs
