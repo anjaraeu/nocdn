@@ -192,7 +192,7 @@ version=$(lsb_release -rs)
 echo -e "${GREEN}It seems that you are running" $os $version ${NC}
 
 if [[ $EUID -ne 0 ]]; then
-   echo "${RED}This script must be run as root${NC}" 1>&2
+   echo -e "${RED}This script must be run as root${NC}" 1>&2
    exit 1
 fi
 
