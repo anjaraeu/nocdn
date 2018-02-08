@@ -15,9 +15,9 @@ echo -e ${NC}
 
 
 function install_nginx_debian {
-if [ "$version" = "10.*" ]
+if [ "$version" = "testing" ]
 then
-    echo -e "${RED}Warning! Using debian sid might not work${NC}"
+    echo -e "${RED}Warning! Using debian testing might not work${NC}"
     apt install nginx -y
 fi
 if [ "$version" = "9.*" ]
