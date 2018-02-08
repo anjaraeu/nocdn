@@ -33,7 +33,8 @@ fi
 
 function choice-le-selfsigned {
 	# leorsf means Let's encrypt or self-signed
-	echo "Do you want to generate and use self-signed certificates or use a Let's Encrypt one? [LE/selfsigned]"; read -p leorsf
+	echo "For the 'Fantom cdn' part, a self-signed certificate will be used, (we can't issue a cert from a trusted CA for the CDNs), but you  can use a Let's encrypt certificate for the public part."
+	echo "Do you want to generate and use self-signed certificates or use a Let's Encrypt one ? [LE/selfsigned]"; read -p leorsf
 
 if [[ "$leorsf" == "LE" ]]; then
 	le_certs
@@ -63,8 +64,11 @@ function le_certs {
 		cp /srv/nocdn/conf/nocdn1.conf /etc/nginx/sites-enabled/nocdn1.conf
 		sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1.conf
 		sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1.conf
+		echo "Generating the fantom self-signed certificate ..."
+		openssl req -x509 -newkey rsa:4096 -sha256 -utf8 -days 3650 -nodes -config /srv/nocdn/conf/openssl_fantom.conf -keyout /srv/nocdn/certs/fantom_key.pem -out /srv/nocdn/certs/fantom_cert.pem
 		echo "Restarting nginx ..."
 		systemctl restart nginx
+		install_config_2_le
 	fi
 	if [[ "$response" =~ ^(no|n)$ ]] ; then
 		echo "Installing acme.sh ..."
@@ -75,15 +79,22 @@ function le_certs {
 		cp /srv/nocdn/conf/nocdn1.conf /etc/nginx/sites-enabled/nocdn1.conf
 		sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1.conf
 		sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1.conf
+		echo "Generating the fantom self-signed certificate ..."
+		openssl req -x509 -newkey rsa:4096 -sha256 -utf8 -days 3650 -nodes -config /srv/nocdn/conf/openssl_fantom.conf -keyout /srv/nocdn/certs/fantom_key.pem -out /srv/nocdn/certs/fantom_cert.pem
 		echo "Restarting nginx ..."
 		systemctl restart nginx
+		install_config_2_le
 	fi
 }
 
 
-function le_certs {
-	echo "Generating self-signed certificate ..."
-	openssl req -x509 -newkey rsa:4096 -sha256 -utf8 -days 3650 -nodes -config /srv/nocdn/conf/openssl.conf -keyout /srv/nocdn/certs/key.pem -out /srv/nocdn/certs/cert.pem
+function selfsigned_certs {
+	echo "Generating the public self-signed certificate ..."
+	sed -i "s|domain.tld|$domain|" /srv/nocdn/conf/openssl_public.conf
+	openssl req -x509 -newkey rsa:4096 -sha256 -utf8 -days 3650 -nodes -config /srv/nocdn/conf/openssl_public.conf -keyout /srv/nocdn/certs/public_key.pem -out /srv/nocdn/certs/public_cert.pem
+	echo "Generating the fantom self-signed certificate ..."
+	openssl req -x509 -newkey rsa:4096 -sha256 -utf8 -days 3650 -nodes -config /srv/nocdn/conf/openssl_fantom.conf -keyout /srv/nocdn/certs/fantom_key.pem -out /srv/nocdn/certs/fantom_cert.pem
+	install_config_2_selfsigned
 }
 
 function install_config_1 {
@@ -97,9 +108,10 @@ function install_config_1 {
 	# TLS configuration
 	cp /srv/nocdn/conf/ciphers.conf /etc/nginx/conf.d/ciphers.conf
 
-	# temporary, need to add this after, generate SAN self-signed certificate, etc
-	# cp /srv/nocdn/conf/nocdn2.conf /etc/nginx/sites-enabled/nocdn2.conf
-	sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1_temp.conf
+	# Nginx config for the fantoms CDNs
+	cp /srv/nocdn/conf/nocdn2.conf /etc/nginx/sites-enabled/nocdn2.conf
+	
+	# Restart nginx
 	systemctl restart nginx
 
 	# generate certs
@@ -115,7 +127,6 @@ function install_config_2_le {
 }
 
 function install_config_2_selfsigned {
-	rm /etc/nginx/sites-enabled/nocdn1_temp.conf
 	cp /srv/nocdn/conf/nocdn1_selfsigned.conf /etc/nginx/sites-enabled/nocdn1_selfsigned.conf
 	systemctl restart nginx
 }
@@ -129,13 +140,13 @@ echo "On which (sub)domain do you want to install NoCDN?"; read -r domain
 read -r -p "Do you have already have nginx installed and include /etc/nginx/sites-enabled/* in your nginx.conf ? [y/N] " response
 response=${response,,}    # tolower
 if [[ "$response" =~ ^(yes|y)$ ]] ; then
-install_config
+install_config_1
 success
 exit 1
 fi
 if [[ "$response" =~ ^(no|n)$ ]] ; then
 	install_nginx_debian
-	install_config
+	install_config_1
 	success
 	exit 1
 fi
@@ -149,13 +160,13 @@ function start_arch {
 	read -r -p "Do you have already have nginx installed and include /etc/nginx/sites-enabled/* in your nginx.conf ? [y/N] " response
 	response=${response,,}    # tolower
 	if [[ "$response" =~ ^(yes|y)$ ]] ; then
-		install_config
+		install_config_1
 		success
 	exit 1
 	fi
 	if [[ "$response" =~ ^(no|n)$ ]] ; then
 		install_nginx_arch
-		install_config
+		install_config_1
 		success
 		exit 1
 	fi
