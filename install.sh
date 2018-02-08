@@ -12,6 +12,10 @@ echo -e ' |_| \_|\___/ \_____|_____/|_| \_|'
 echo -e 'This script will install a NoCDN instance on /srv/nocdn.'
 echo -e ${NC}
 
+if [[ $EUID -ne 0 ]]; then
+   echo -e "${RED}This script must be run as root${NC}" 1>&2
+   exit 1
+fi
 
 
 function install_nginx_debian {
@@ -190,11 +194,6 @@ echo -e "${GREEN}Congratulations, your nocdn instance is ready !${NC}"
 os=$(lsb_release -is)
 version=$(lsb_release -rs)
 echo -e "${GREEN}It seems that you are running" $os $version ${NC}
-
-if [[ $EUID -ne 0 ]]; then
-   echo -e "${RED}This script must be run as root${NC}" 1>&2
-   exit 1
-fi
 
 if [[ "$os" == "Debian" ]];
 then
