@@ -87,18 +87,37 @@ function le_certs {
 }
 
 function install_config_1 {
-	echo "Installing NoCDN files ..."
+	echo "* Installing NoCDN's files ..."
+	# this dir should exists by default, though it mabye not, so
 	mkdir /srv
 	git clone https://github.com/nsaovh/nocdn /srv/nocdn
-	echo "Installing nginx config ..."
+	echo "* Installing nginx config ..."
+	# same as /srv
 	mkdir -p /etc/nginx/conf.d
 	# TLS configuration
 	cp /srv/nocdn/conf/ciphers.conf /etc/nginx/conf.d/ciphers.conf
 
-	cp /srv/nocdn/conf/nocdn2.conf /etc/nginx/sites-enabled/nocdn2.conf
+	# temporary, need to add this after, generate SAN self-signed certificate, etc
+	# cp /srv/nocdn/conf/nocdn2.conf /etc/nginx/sites-enabled/nocdn2.conf
 	sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1_temp.conf
 	systemctl restart nginx
 
+	# generate certs
+	choice-le-selfsigned
+}
+
+function install_config_2_le {
+	rm /etc/nginx/sites-enabled/nocdn1_temp.conf
+	cp /srv/nocdn/conf/nocdn1.conf /etc/nginx/sites-enabled/nocdn1_le.conf
+	sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1_le.conf
+	sed -i "s|domain.tld.key|$domain.key|" /etc/nginx/sites-enabled/nocdn1_le.conf
+	systemctl restart nginx
+}
+
+function install_config_2_selfsigned {
+	rm /etc/nginx/sites-enabled/nocdn1_temp.conf
+	cp /srv/nocdn/conf/nocdn1_selfsigned.conf /etc/nginx/sites-enabled/nocdn1_selfsigned.conf
+	systemctl restart nginx
 }
 
 
