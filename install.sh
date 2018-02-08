@@ -182,7 +182,7 @@ echo "It seems that you are running" $os $version
 
 if [[ "$os" == "Debian" ]];
 then
-if [ "$version" = "8.*" ];
+if [[ $version < 8.* ]];
 then
 	echo "Seriously ? Debian" $version "? Please consider to upgrade ..."
 	exit 1
