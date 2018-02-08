@@ -9,11 +9,17 @@ echo -e ' |  \| | ___ | |    | |  | |  \| |'
 echo -e ' | . ` |/ _ \| |    | |  | | ` ` |'
 echo -e ' | |\  | (_) | |____| |__| | |\  |'
 echo -e ' |_| \_|\___/ \_____|_____/|_| \_|'
-echo -e 'This script will install a NoCDN instance on /srv/nocdn. ${NC}'
+echo -e 'This script will install a NoCDN instance on /srv/nocdn.'
+echo -e ${NC}
 
 
 
 function install_nginx_debian {
+if [ "$version" = "10.*" ]
+then
+    echo -e "${RED}Warning! Using debian sid might not work${NC}"
+    apt install nginx -y
+fi
 if [ "$version" = "9.*" ]
 then
 	apt install nginx -y
@@ -33,8 +39,6 @@ then
 		apt-get -t jessie-backports install nginx -y
 	fi
 fi
-
-
 }
 
 function choice-le-selfsigned {
@@ -53,14 +57,14 @@ fi
 }
 
 function install_nginx_arch {
-	pacman -S nginx --noconfirm
+	pacman -Sy nginx --noconfirm
 }
 
 function le_certs {
 	# temp config for LE's first verification
 	cp /srv/nocdn/conf/nocdn1_temp.conf /etc/nginx/sites-enabled/nocdn1_temp.conf
 	sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1_temp.conf
-	
+
 	echo -e "${GREEN}Is acme.sh already installed in /root/.acme.sh ? [y/N] ${NC}" ; read -r response
 	response=${response,,}    # tolower
 	if [[ "$response" =~ ^(yes|y)$ ]] ; then
@@ -113,9 +117,9 @@ function install_config_1 {
 	mkdir -p /etc/nginx/conf.d
 	# TLS configuration
 	cp /srv/nocdn/conf/ciphers.conf /etc/nginx/conf.d/ciphers.conf
-	
+
 	# Create certs dir for selfsigned certs.
-	
+
 	mkdir -p /srv/nocdn/certs
 
 	# Nginx config for the fantoms CDNs
@@ -196,7 +200,7 @@ then
 fi
 	start_debian
 else
-if [[ "$os" == "Arch" ]]; 
+if [[ "$os" == "Arch" ]];
 then
 	start_arch
 else
