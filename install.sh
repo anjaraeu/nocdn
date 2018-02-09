@@ -47,7 +47,7 @@ fi
 
 function choice-le-selfsigned {
 	# leorsf means Let's encrypt or self-signed
-	echo -e "${GREEN}For the 'ghost cdn' part, a self-signed certificate will be used, (we can't issue a cert from a trusted CA for the CDNs), but you can use a Let's encrypt certificate for the public part."
+	echo -e "${GREEN}For the 'ghost cdn' part, a self-signed certificate will be used, (we can't issue a cert from a trusted CA for the CDNs), but you  can use a Let's encrypt certificate for the public part."
 	echo -e "Do you want to generate and use self-signed certificates or use a Let's Encrypt one ? [LE/selfsigned]${NC}"; read -r leorsf
 
 if [[ "$leorsf" =~ ^(LE|le)$ ]] ; then
@@ -61,7 +61,7 @@ fi
 }
 
 function install_nginx_arch {
-	pacman -Sy nginx --noconfirm
+	pacman -S nginx --noconfirm
 }
 
 function le_certs {
@@ -113,78 +113,78 @@ function selfsigned_certs {
 
 function install_config_1 {
 	echo -e "${GREEN}* Installing NoCDN's files ...${NC}"
+    echo "*** Installing NoCDN'S files ... ***" > /tmp/nocdn.log
 	# this dir should exists by default, though it mabye not, so
-	mkdir /srv >> /dev/null
-	git clone https://github.com/nsaovh/nocdn /srv/nocdn
+	mkdir /srv > /dev/null
+	git clone https://github.com/nsaovh/nocdn /srv/nocdn > /tmp/nocdn.log
 	echo -e "${GREEN}* Installing nginx config ...${NC}"
+    echo "*** Installing nginx config ... ***" > /tmp/nocdn.log
 	# same as /srv
-	mkdir -p /etc/nginx/conf.d >> /dev/null
+	mkdir -p /etc/nginx/conf.d > /dev/null
 	# TLS configuration
-	cp /srv/nocdn/conf/ciphers.conf /etc/nginx/conf.d/ciphers.conf
+	cp /srv/nocdn/conf/ciphers.conf /etc/nginx/conf.d/ciphers.conf > /dev/null
 
 	# Create certs dir for selfsigned certs.
 
-	mkdir -p /srv/nocdn/certs >> /dev/null
+	mkdir -p /srv/nocdn/certs > /dev/null
 
 	# Nginx config for the ghosts CDNs
-	cp /srv/nocdn/conf/nocdn2.conf /etc/nginx/sites-enabled/nocdn2.conf
+	cp /srv/nocdn/conf/nocdn2.conf /etc/nginx/sites-enabled/nocdn2.conf > /dev/null
 
 	# generate certs
 	choice-le-selfsigned
 }
 
 function install_config_2_le {
-	rm /etc/nginx/sites-enabled/nocdn1_temp.conf >> /dev/null
-	cp /srv/nocdn/conf/nocdn1.conf /etc/nginx/sites-enabled/nocdn1_le.conf >> /dev/null
-	sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1_le.conf 
+	rm /etc/nginx/sites-enabled/nocdn1_temp.conf > /dev/null
+	cp /srv/nocdn/conf/nocdn1.conf /etc/nginx/sites-enabled/nocdn1_le.conf > /dev/null
+	sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1_le.conf
 	sed -i "s|domain.tld.key|$domain.key|" /etc/nginx/sites-enabled/nocdn1_le.conf
 	systemctl restart nginx
 }
 
 function install_config_2_selfsigned {
-	cp /srv/nocdn/conf/nocdn1_selfsigned.conf /etc/nginx/sites-enabled/nocdn1_selfsigned.conf >> /dev/null
+	cp /srv/nocdn/conf/nocdn1_selfsigned.conf /etc/nginx/sites-enabled/nocdn1_selfsigned.conf > /dev/null
+    sed -i "s|domain.tld|$domain|" /etc/nginx/sites-enabled/nocdn1_selfsigned.conf
+	sed -i "s|domain.tld.key|$domain.key|" /etc/nginx/sites-enabled/nocdn1_selfsigned.conf
 	systemctl restart nginx
 }
 
 
 function start_debian {
-apt update && apt full-upgrade -y
-apt install git
-echo -e "${GREEN}On which (sub)domain do you want to install NoCDN?${NC}"; read -r domain
+    apt update >> /dev/null
+    apt install git >> /dev/null
+    echo -e "${GREEN}On which (sub)domain do you want to install NoCDN?${NC}"; read -r domain
 
-echo -e "${GREEN}Do you have already have nginx installed and include /etc/nginx/sites-enabled/* in your nginx.conf ? [y/N] ${NC}"; read -r response
-response=${response,,}    # tolower
-if [[ "$response" =~ ^(yes|y)$ ]] ; then
-install_config_1
-success
-exit 1
-fi
-if [[ "$response" =~ ^(no|n)$ ]] ; then
-	install_nginx_debian
-	install_config_1
-	success
-	exit 1
-fi
+    sudo grep "include /etc/nginx/sites-enabled/\*;" /etc/nginx/nginx.conf; dpkg-query --show nginx||TEST="false"; echo -e "Nginx is not installed"
+    if [[ "$TEST" == "false" ]]; then
+        install_nginx_debian
+        install_config_1
+        success
+        exit 0
+    else
+        install_config_1
+        success
+        exit 0
+    fi
 }
 
 function start_arch {
-	pacman -Syu
-	pacman -S git --noconfirm
+	pacman -Sy > /dev/null
+	pacman -S git --noconfirm > /dev/null
 	echo -e "${GREEN}On which (sub)domain do you want to install NoCDN?${NC}"; read -r domain
 
-	echo -e "${GREEN}Do you have already have nginx installed and include /etc/nginx/sites-enabled/* in your nginx.conf ? [y/N] ${NC}"; read -r response
-	response=${response,,}    # tolower
-	if [[ "$response" =~ ^(yes|y)$ ]] ; then
-		install_config_1
-		success
-	exit 1
-	fi
-	if [[ "$response" =~ ^(no|n)$ ]] ; then
-		install_nginx_arch
-		install_config_1
-		success
-		exit 1
-	fi
+    sudo grep "include /etc/nginx/sites-enabled/\*;" /etc/nginx/nginx.conf; pacman -Qi nginx||TEST="false"; echo -e "Nginx is not installed"
+    if [[ "$TEST" == "false" ]]; then
+        install_nginx_arch
+        install_config_1
+        success
+        exit 0
+    else
+        install_config_1
+        success
+        exit 0
+    fi
 }
 
 function success {
