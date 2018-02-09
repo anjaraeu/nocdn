@@ -156,7 +156,7 @@ function start_debian {
     apt install git >> /dev/null
     echo -e "${GREEN}On which (sub)domain do you want to install NoCDN?${NC}"; read -r domain
 
-    sudo grep "include /etc/nginx/sites-enabled/\*;" /etc/nginx/nginx.conf; dpkg-query --show nginx||TEST="false"; echo -e "Nginx is not installed"
+    (grep "include /etc/nginx/sites-enabled/\*;" /etc/nginx/nginx.conf > /dev/null; dpkg-query --show nginx > /dev/null)||(TEST="false"; echo -e "Nginx is not installed")
     if [[ "$TEST" == "false" ]]; then
         install_nginx_debian
         install_config_1
@@ -174,7 +174,7 @@ function start_arch {
 	pacman -S git --noconfirm > /dev/null
 	echo -e "${GREEN}On which (sub)domain do you want to install NoCDN?${NC}"; read -r domain
 
-    sudo grep "include /etc/nginx/sites-enabled/\*;" /etc/nginx/nginx.conf; pacman -Qi nginx||TEST="false"; echo -e "Nginx is not installed"
+    (grep "include /etc/nginx/sites-enabled/\*;" /etc/nginx/nginx.conf; pacman -Qi nginx)||(TEST="false"; echo -e "Nginx is not installed")
     if [[ "$TEST" == "false" ]]; then
         install_nginx_arch
         install_config_1
