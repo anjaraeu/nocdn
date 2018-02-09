@@ -2,6 +2,7 @@
 GREEN='\033[0;32m'
 RED='\033[0;33m'
 NC='\033[0m'
+clear
 echo -e ${GREEN}
 echo -e '  _   _        _____ _____  _   _ '
 echo -e ' | \ | |      / ____|  __ \| \ | |'
