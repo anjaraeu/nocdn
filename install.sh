@@ -47,7 +47,7 @@ fi
 
 function choice-le-selfsigned {
 	# leorsf means Let's encrypt or self-signed
-	echo -e "${GREEN}For the 'ghost cdn' part, a self-signed certificate will be used, (we can't issue a cert from a trusted CA for the CDNs), but you  can use a Let's encrypt certificate for the public part."
+	echo -e "${GREEN}For the 'ghost cdn' part, a self-signed certificate will be used, (we can't issue a cert from a trusted CA for the CDNs), but you can use a Let's encrypt certificate for the public part."
 	echo -e "Do you want to generate and use self-signed certificates or use a Let's Encrypt one ? [LE/selfsigned]${NC}"; read -r leorsf
 
 if [[ "$leorsf" =~ ^(LE|le)$ ]] ; then
