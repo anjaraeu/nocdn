@@ -119,18 +119,18 @@ function install_config_1 {
 	echo -e "${GREEN}* Installing NoCDN's files ...${NC}"
     echo "*** Installing NoCDN'S files ... ***" > /tmp/nocdn.log
 	# this dir should exists by default, though it mabye not, so
-	mkdir /srv > /dev/null
+	mkdir /srv > /dev/null 2>&1
 	git clone https://github.com/nsaovh/nocdn /srv/nocdn > /tmp/nocdn.log
 	echo -e "${GREEN}* Installing nginx config ...${NC}"
     echo "*** Installing nginx config ... ***" > /tmp/nocdn.log
 	# same as /srv
-	mkdir -p /etc/nginx/conf.d > /dev/null
+	mkdir -p /etc/nginx/conf.d > /dev/null 2>&1
 	# TLS configuration
 	cp /srv/nocdn/conf/ciphers.conf /etc/nginx/conf.d/ciphers.conf > /dev/null
 
 	# Create certs dir for selfsigned certs.
 
-	mkdir -p /srv/nocdn/certs > /dev/null
+	mkdir -p /srv/nocdn/certs > /dev/null 2>&1
 
 	# Nginx config for the ghosts CDNs
 	cp /srv/nocdn/conf/nocdn2.conf /etc/nginx/sites-enabled/nocdn2.conf > /dev/null
@@ -156,8 +156,12 @@ function install_config_2_selfsigned {
 
 
 function start_debian {
-    apt update >> /dev/null
-    apt install git >> /dev/null
+	echo "[+] apt update"
+	sleep 1
+    apt update > /dev/null 2>&1
+    echo "[+] apt install git"
+    sleep 1
+    apt install git > /dev/null 2>&1
     echo -e "${GREEN}On which (sub)domain do you want to install NoCDN?${NC}"; read -r domain
 
 grep "include /etc/nginx/sites-enabled/\*;" /etc/nginx/nginx.conf >> /dev/null
