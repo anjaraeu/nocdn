@@ -2,6 +2,9 @@
 GREEN='\033[0;32m'
 RED='\033[0;33m'
 NC='\033[0m'
+os=$(lsb_release -is)
+version=$(lsb_release -rs)
+
 clear
 echo -e ${GREEN}
 echo -e '  _   _        _____ _____  _   _ '
@@ -157,17 +160,30 @@ function start_debian {
     apt install git >> /dev/null
     echo -e "${GREEN}On which (sub)domain do you want to install NoCDN?${NC}"; read -r domain
 
-    (grep "include /etc/nginx/sites-enabled/\*;" /etc/nginx/nginx.conf > /dev/null; dpkg-query --show nginx > /dev/null)||(TEST="false"; echo -e "Nginx is not installed")
-    if [[ "$TEST" == "false" ]]; then
-        install_nginx_debian
-        install_config_1
-        success
-        exit 0
-    else
-        install_config_1
-        success
-        exit 0
-    fi
+grep "include /etc/nginx/sites-enabled/\*;" /etc/nginx/nginx.conf >> /dev/null
+if [ $? -eq 2 ]; then
+    	echo "Nginx is not installed !"
+    	echo "installing it..."
+    	install_nginx_debian
+		install_config_1
+		success
+		exit 0
+else
+	if [ $? -eq 1 ]; then
+		echo "/etc/nginx/sites-enabled/* is not included in your Nginx configuration !"
+		echo "Activing it.."
+		sed -i '$i	include /etc/nginx/sites-enabled/\*;' /etc/nginx/nginx.conf
+		install_config_1
+		success
+		exit 0
+	else 
+		if [ $? -eq 0 ]; then
+			echo "Nginx is installed and correctly configured."
+			install_config_1
+		fi
+	fi
+fi
+
 }
 
 function start_arch {
@@ -175,25 +191,19 @@ function start_arch {
 	pacman -S git --noconfirm > /dev/null
 	echo -e "${GREEN}On which (sub)domain do you want to install NoCDN?${NC}"; read -r domain
 
-    (grep "include /etc/nginx/sites-enabled/\*;" /etc/nginx/nginx.conf; pacman -Qi nginx)||(TEST="false"; echo -e "Nginx is not installed")
-    if [[ "$TEST" == "false" ]]; then
-        install_nginx_arch
-        install_config_1
-        success
-        exit 0
-    else
-        install_config_1
-        success
-        exit 0
-    fi
+
 }
 
 function success {
-echo -e "${GREEN}Congratulations, your nocdn instance is ready !${NC}"
+echo -e "${GREEN}Congratulations, your NoCDN instance is ready !${NC}"
 }
 
-os=$(lsb_release -is)
-version=$(lsb_release -rs)
+
+
+
+# real script, no more functions here !
+
+
 echo -e "${GREEN}It seems that you are running" $os $version ${NC}
 
 if [[ "$os" == "Debian" ]];
