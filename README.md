@@ -1,15 +1,15 @@
 # NoCDN
 Nocdn is an alternative to old-school CDNs
 
-For the developers who wants to protect the privacy of the users, just put "nocdn.domain.tld/" between "https://" and the CDN.
-Per example, if you want to have a javascript file on ajax.googleapis.com, and you installed NoCDN on nocdn.nsa.ovh, the URL should be like this: https://nocdn.nsa.ovh/ajax.googleapis.com/some/random/ressource.
+For the developers who wants to protect the privacy of their users, just put "nocdn.domain.tld/" between "https://" and the CDN.
+Per example, if you want to have a javascript file on ajax.googleapis.com, and, if you installed NoCDN on nocdn.nsa.ovh, the URL should be like this: https://nocdn.nsa.ovh/ajax.googleapis.com/some/random/ressource.
 
-For a user, you can bind thoses old-school CDN to your instance.
-You can do it by editing the entries in your local resolver or editing your host file.
+For an user, you can bind thoses old-school CDN to your instance.
+You can do it by editing the entries in your local resolver or editing your hosts file.
 
-So each time you call for a cdn, the request will be handled by your instance, a big plus for privacy.
+So each time you call for a CDN, the request will be handled by your instance, a big plus for privacy.
 
-For now, we only support Javascript CDN, we will do css CDN in the future.
+For now, we only support Javascript CDNs, we will do CSS CDNs in the future.
 
 ## CDNs supported
 
