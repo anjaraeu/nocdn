@@ -35,7 +35,7 @@ bash /tmp/install.sh
 ## Docker
 You can run NoCDN via Docker:
 ```sh
-docker run -p 8080:80 --name nocdn luclu7/nocdn
+docker run -p 8080:80 --name nocdn -d luclu7/nocdn
 ```
 
 ## License :
