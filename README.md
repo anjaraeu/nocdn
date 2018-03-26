@@ -32,6 +32,11 @@ wget https://raw.githubusercontent.com/nsaovh/nocdn/master/install.sh -O /tmp/in
 less /tmp/install.sh
 bash /tmp/install.sh
 ```
+## Docker
+You can run NoCDN via Docker:
+```sh
+docker run -p 8080:80 --name nocdn luclu7/nocdn
+```
 
 ## License :
 
