@@ -161,7 +161,7 @@ function start_debian {
     apt update > /dev/null 2>&1
     echo "[+] apt install git"
     sleep 1
-    apt install git > /dev/null 2>&1
+    apt install git -y > /tmp/nocdn.log 2>&1
     echo -e "${GREEN}On which (sub)domain do you want to install NoCDN?${NC}"; read -r domain
 
 grep "include /etc/nginx/sites-enabled/\*;" /etc/nginx/nginx.conf >> /dev/null
