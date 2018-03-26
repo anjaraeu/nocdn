@@ -120,7 +120,8 @@ function install_config_1 {
     echo "*** Installing NoCDN'S files ... ***" > /tmp/nocdn.log
 	# this dir should exists by default, though it mabye not, so
 	mkdir /srv > /dev/null 2>&1
-	git clone https://github.com/nsaovh/nocdn /srv/nocdn > /tmp/nocdn.log
+	git clone https://github.com/nsaovh/nocdn /srv/nocdn >> /tmp/nocdn.log
+	git clone https://github.com/nsaovh/public /src/nocdn/public >> /tmp/nocdn.log
 	echo -e "${GREEN}* Installing nginx config ...${NC}"
     echo "*** Installing nginx config ... ***" > /tmp/nocdn.log
 	# same as /srv
